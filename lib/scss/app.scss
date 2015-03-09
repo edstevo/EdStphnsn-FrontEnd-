@@ -1,0 +1,43 @@
+@import "../../bower_components/foundation/scss/foundation.scss";
+@import "../../bower_components/foundation/scss/normalize.scss";
+@import "../../bower_components/font-awesome/scss/font-awesome.scss";
+
+@import "variables.scss";
+@import "admin.scss";
+@import "body.scss";
+@import "blog.scss";
+@import "header.scss";
+@import "overrides.scss";
+@import "travel.scss";
+
+.main-content {
+	padding: 40px 0px!important;
+}
+
+.pointer {
+	cursor: pointer;
+}
+
+.fa {
+	margin-right: 5px;
+}
+
+.button {
+	font-size:1.5em;
+}
+
+.text-info {
+	color: $info-colour;
+}
+
+.text-warning {
+	color: $warning-colour;
+}
+
+.text-danger {
+	color: $danger-colour;
+}
+
+.text-success {
+	color: $success-colour;
+}

@@ -1,0 +1,25 @@
+<div class="large-6 columns padding-0 left">
+
+	<div ui-view></div>
+
+</div>
+<div class="large-3 columns blog-sidebar left">
+
+	<div class="sidebar-widget">
+		<h6 class="widget-title">Latest Posts</h6>
+		<ol class="side-nav latest-posts">
+			<li ng-repeat="post in latest_posts">
+				<a ui-sref="app.public.blog.post({post_id:post.id})">
+					<div class="date">{{ post.created_at | readableDate }}</div>
+					<div class="title">{{ post.title }}</div>
+				</a>
+			</li>
+		</ol>
+	</div>
+
+	<div class="sidebar-widget">
+		<h6 class="widget-title">Tags</h6>
+		<span class="label secondary tag" ng-bind="tag.name" ng-repeat="tag in tags"></span>
+	</div>
+
+</div>

@@ -1,0 +1,37 @@
+<nav class="top-bar large-10 columns" data-topbar role="navigation">
+	<div class="row">
+		<ul class="title-area">
+			<li class="name">
+				<h1><a ng-bind="page_title">Edit Post</a></h1>
+			</li>
+		</ul>
+
+	</div>
+</nav>
+
+<div class="main-content">
+	<table width="100%" class="post-list">
+		<thead>
+			<tr>
+				<th width="60%">Title</th>
+				<th width="150" ng-show="show_status" class="text-center">Status</th>
+				<th width="150" class="text-center">Last Updated</th>
+				<th class="right" width="150"></th>
+			</tr>
+		</thead>
+		<tbody>
+			<tr ng-repeat="post in posts" ui-sref="app.admin.post({post_id:post.id})" class="pointer">
+				<td ng-bind="post.title"></td>
+				<td ng-show="show_status" class="text-center">
+					<span ng-show="post.draft" class="text-info">Draft</span>
+					<span ng-hide="post.draft" class="text-success">Live</span>
+				</td>
+				<td ng-bind="post.updated_at | readableDate" class="text-center"></td>
+				<td class="right">
+					<a class="button tiny text-center m-b-0"><i class="fa fa-eye"></i></a>
+					<a class="button tiny text-center m-b-0"><i class="fa fa-edit"></i></a>
+				</td>
+			</tr>
+		</tbody>
+	</table>
+</div>

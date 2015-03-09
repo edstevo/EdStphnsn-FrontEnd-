@@ -1,0 +1,19 @@
+<div class="post-content">
+	<div class="large-12 columns" ng-hide="post_returned">
+		<i class="fa fa-fw fa-spin fa-refresh"></i>Loading...
+	</div>
+	
+	<div class="large-12 columns" ng-show="post_returned">
+	
+		<div class="post-header">
+			<h3 class="post-title" ng-bind="post.title"></h3>
+			<h6 class="subheader meta-data">
+				<i class="fa fa-fw fa-calendar"></i><span ng-bind="post.created_at | readableDate"></span>&nbsp;&nbsp;
+				<i class="fa fa-fw fa-user"></i><span ng-bind="post.creator.fullname"></span>
+			</h6>
+		</div>
+		
+		<div ng-bind-html="post_content"></div>
+	
+	</div>
+</div>
