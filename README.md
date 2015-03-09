@@ -1,1 +1,3 @@
-# EdStphnsn[FrontEnd] — Frontend Repository for my personal blog
+# EdStphnsn[FrontEnd]
+
+## Frontend Repository for my personal blog
