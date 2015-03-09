@@ -197,6 +197,10 @@ app.controller('EditPostCtrl', [	'$scope',
 	scope.tags 					= [];
 	var timer;
 
+	$('.datepicker').datepicker({
+	    format: 'dd M yy'
+	});
+
 	scope.$watch('details', function(new_val) {
 		if (new_val)
 		{
@@ -345,7 +349,7 @@ app.controller('AdminCtrl', ['$rootScope', '$scope', '$state', 'Auth', function(
 app.controller('AppCtrl', ['$rootScope', '$scope', function(rootScope, scope) {
 
 }]);
-app.controller('NavCtrl', ['$rootScope', '$scope', 'Twitter', 'Auth', function(rootScope, scope, Twitter, Auth) {
+app.controller('NavCtrl', ['$rootScope', '$scope', '$state', 'Twitter', 'Auth', function(rootScope, scope, state, Twitter, Auth) {
 
 	//	Authentication
 	scope.authenticate 	= function()
@@ -371,6 +375,21 @@ app.filter('fromNow', function() {
 app.filter('readableDate', function() {
 		return function(date) {
 			return moment(date).format("D MMM YYYY");
+		}
+	});
+app.filter('returnDay', function() {
+		return function(date) {
+			return moment(date).format("DD");
+		}
+	});
+app.filter('returnMonth', function() {
+		return function(date) {
+			return moment(date).format("MMM");
+		}
+	});
+app.filter('returnYear', function() {
+		return function(date) {
+			return moment(date).format("YYYY");
 		}
 	});
 app.factory('Admin', [	'Base64',
@@ -723,9 +742,10 @@ app.controller('BlogListCtrl', ['$scope', '$state', '$sce', 'Blog', function(sco
 
 	Blog.get()
 		.$promise.then(function(response) {
-			var half_length				= Math.ceil(response.data.length / 2);
-			scope.posts_left			= response.data.slice(0, half_length);
-			scope.posts_right			= response.data.slice(half_length);
+			var third_length			= Math.ceil(response.data.length / 3);
+			scope.posts_left			= response.data.slice(0, third_length);
+			scope.posts_center			= response.data.slice(third_length, (third_length*2));
+			scope.posts_right			= response.data.slice((third_length*2));
 			scope.posts_returned 	= true;
 		});
 
@@ -788,7 +808,6 @@ app.controller('TravelCtrl', ['$scope', '$state', 'uiGmapGoogleMapApi', 'Travel'
 				markers.push(marker);
 			}
 			scope.locations		= markers;
-			console.log(scope.locations);
 		});
 
 }]);

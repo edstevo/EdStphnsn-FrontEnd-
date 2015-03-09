@@ -1,19 +1,29 @@
 <div class="post-content">
-	<div class="large-12 columns" ng-hide="post_returned">
-		<i class="fa fa-fw fa-spin fa-refresh"></i>Loading...
+	<div class="col-md-1 post-info">
+		<div class="date" ng-hide="post_returned">
+			<i class="fa fa-fw fa-spin fa-refresh"></i>
+		</div>
+		<div class="date" ng-show="post_returned">
+			<div class="month" ng-bind="post.created_at | returnMonth"></div>
+			<div class="day" ng-bind="post.created_at | returnDay"></div>
+			<div class="year" ng-bind="post.created_at | returnYear"></div>
+		</div>
+		<div class="topics">
+			<h6>Categories</h6>
+			<div ng-repeat="tag in post.tags" ng-bind="tag.name"></div>
+		</div>
 	</div>
-	
-	<div class="large-12 columns" ng-show="post_returned">
-	
-		<div class="post-header">
+
+	<div class="col-md-10 col-md-offset-2">
+
+		<div class="post-header" ng-show="post_returned">
 			<h3 class="post-title" ng-bind="post.title"></h3>
 			<h6 class="subheader meta-data">
-				<i class="fa fa-fw fa-calendar"></i><span ng-bind="post.created_at | readableDate"></span>&nbsp;&nbsp;
-				<i class="fa fa-fw fa-user"></i><span ng-bind="post.creator.fullname"></span>
+				<i class="fa fa-fw fa-pencil"></i><span ng-bind="post.creator.name"></span>
 			</h6>
 		</div>
-		
-		<div ng-bind-html="post_content"></div>
-	
+
+		<div class="post-content" ng-bind-html="post_content"></div>
+
 	</div>
 </div>

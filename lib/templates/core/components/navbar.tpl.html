@@ -1,5 +1,6 @@
-<div class="panel text-center pointer" ui-sref="app.public.home">
-	<img ng-src="{{ profile_pic }}" width="100%" height="100%">
+<div class="title" ui-sref="app.public.home">
+	<h3>@ed_stphnsn</h3>
+	<div class="slogan">Embracing the unconventional. Striving to make a difference, one impatient step at a time.</div>
 </div>
 
 <div ui-view="sub-nav"></div>
@@ -16,13 +17,12 @@
 	</a></dd>
 </div>
 
-<ul class="inline-list sidebar-footer">
+<ul class="list-inline sidebar-footer">
 <!-- 	Start: Login / Admin Routes -->
 	<li ng-hide="user_data"><a ng-click="authenticate()">Log In</a></li>
 	<li ng-show="user_data"><a ui-sref="app.admin.home">@{{ user_data.screen_name }}</a></li>
 <!-- 	End: Login / Admin Routes -->
 <!-- 	Start: Log Out -->
-	<li ng-show="user_data"><a> - </a></li>
 	<li ng-show="user_data"><a ng-click="log_out()">Log Out</a></li>
 <!-- 	End: Log Out -->
 </ul>

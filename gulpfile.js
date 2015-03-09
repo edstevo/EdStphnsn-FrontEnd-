@@ -1,9 +1,11 @@
 var gulp 		= require('gulp');
 var sass 		= require('gulp-sass');
+var less 		= require('gulp-less');
 var uglify 		= require('gulp-uglify');
 var concat 		= require('gulp-concat');
 var watch 		= require('gulp-watch');
 var minifyCSS 	= require('gulp-minify-css');
+var sourcemaps 	= require('gulp-sourcemaps');
 var beeper 		= require('beeper');
 
 gulp.task('default', [
@@ -16,7 +18,9 @@ gulp.task('default', [
 
 gulp.task('core', function () {
 	gulp.src([	'bower_components/jquery/dist/jquery.min.js',
+				'bower_components/jquery/dist/jquery.min.map',
 				'bower_components/angular/angular.min.js',
+				'bower_components/angular/angular.min.js.map',
 				'bower_components/html5-boilerplate/js/vendor/modernizr-2.6.2.min.js' ])
 		.pipe(gulp.dest('app/js'));
 
@@ -52,25 +56,30 @@ gulp.task('scripts', function() {
 				'bower_components/angular-moment/angular-moment.js',
 				'bower_components/typeahead.js/dist/typeahead.bundle.js',
 				'bower_components/ngAutocomplete/src/ngAutocomplete.js',
-				'bower_components/map-icons/js/map-icons.js'	])
+				'bower_components/map-icons/js/map-icons.js',
+				'bower_components/jquery-sticky/jquery.sticky.js',
+				'bower_components/bootstrap-datepicker/js/bootstrap-datepicker.js'	])
 		.pipe(concat('vendor.js'))
 		.pipe(uglify())
 		.pipe(gulp.dest('app/js/'));
 });
 
 gulp.task('css', function () {
-    gulp.src('lib/scss/*.scss')
-        .pipe(concat('all.css'))
-        .pipe(sass())
-        .pipe(gulp.dest('app/css'));
+	gulp.src('lib/less/app.less')
+		.pipe(less({
+			paths: ['public/less']
+		}))
+		.pipe(concat('all.css'))
+		.pipe(minifyCSS())
+		.pipe(gulp.dest('app/css'));
 
-	gulp.src([ 'bower_components/map-icons/css/map-icons.css' ])
+	gulp.src([ 	'bower_components/map-icons/css/map-icons.css' ])
 		.pipe(concat('vendor.css'))
 		.pipe(gulp.dest('app/css'));
 });
 
 gulp.task('watch', function () {
-	gulp.watch('lib/scss/**/*.scss', ['css']);
+	gulp.watch('lib/less/**/*.less', ['css']);
 	gulp.watch('lib/js/**/*.js', ['scripts']);
 	gulp.watch('lib/**/*.html', ['html']);
 });
