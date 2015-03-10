@@ -462,127 +462,6 @@ app.controller('NavCtrl', ['$rootScope', '$scope', '$state', 'Twitter', 'Auth', 
 app.controller('PublicCtrl', ['$scope', '$state', function(scope, state) {
 
 }]);
-app.controller('BlogCtrl', ['$scope', '$state', 'LatestBlog', 'Tags', function(scope, state, LatestBlog, Tags) {
-
-	LatestBlog.get({}, {})
-		.$promise.then(function(response) {
-			scope.latest_posts 	= response.data;
-		});
-
-	Tags.get({}, {})
-		.$promise.then(function(response) {
-			scope.tags					= response.data;
-		});
-
-}]);
-app.controller('BlogListCtrl', ['$scope', '$state', '$sce', 'Blog', function(scope, sce, state, Blog) {
-
-	scope.posts_returned 	= false;
-
-	Blog.get()
-		.$promise.then(function(response) {
-			var third_length			= Math.ceil(response.data.length / 3);
-			scope.posts_left			= response.data.slice(0, third_length);
-			scope.posts_center			= response.data.slice(third_length, (third_length*2));
-			scope.posts_right			= response.data.slice((third_length*2));
-			scope.posts_returned 	= true;
-		});
-
-
-	window.twttr=(function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],t=window.twttr||{};if(d.getElementById(id))return;js=d.createElement(s);js.id=id;js.src="https://platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);t._e=[];t.ready=function(f){t._e.push(f);};return t;}(document,"script","twitter-wjs"));
-
-}]);
-app.controller('BlogPostCtrl', ['$scope', '$state', '$stateParams', '$sce', 'Blog', function(scope, state, stateParams, sce, Blog) {
-
-	scope.post_returned = false;
-
-	Blog.get({post_id:stateParams.post_id})
-		.$promise.then(function(response) {
-			console.log(response);
-			scope.post 			= response.data;
-			scope.post_returned = true;
-			scope.post_content	= sce.trustAsHtml(response.data.content);
-		});
-
-}]);
-app.controller('HomeCtrl', ['$scope', function($scope) {
-  
-}]);
-app.controller('MusicCtrl', ['$scope', '$state', '$sce', 'Playlists', function(scope, sce, state, Playlists) {
-
-	scope.page_title	= "Latest Music";
-
-	Playlists.get()
-		.$promise.then(function(response) {
-			scope.playlists				= response.data;
-			scope.playlists_returned 	= true;
-		});
-
-}]);
-app.controller('MusicListCtrl', ['$scope', '$state', '$sce', 'Tracks', function(scope, sce, state, Tracks) {
-
-	Tracks.get()
-		.$promise.then(function(response) {
-			var third_length		= Math.ceil(response.data.length / 3);
-			scope.tracks_left		= response.data.slice(0, third_length);
-			scope.tracks_center		= response.data.slice(third_length, (third_length*2));
-			scope.tracks_right		= response.data.slice((third_length*2));
-			scope.tracks_returned 	= true;
-		});
-
-}]);
-app.controller('PlaylistCtrl', ['$scope', '$stateParams', 'Playlists', function(scope, stateParams, Playlists) {
-
-	scope.$parent.page_title	= "Playlists";
-
-	Playlists.get({playlist_id: stateParams.playlist_id})
-		.$promise.then(function(response) {
-			scope.playlist = response.data;
-		});
-
-}]);
-app.controller('TravelCtrl', ['$scope', '$state', 'uiGmapGoogleMapApi', 'Travel', function(scope, state, uiGmapGoogleMapApi, Travel) {
-
-	uiGmapGoogleMapApi.then(function(maps) {
-
-		scope.map = {
-			center: {
-				latitude: 45,
-				longitude: -73
-			},
-			zoom: 3
-		};
-
-	});
-
-	scope.locations 	= [];
-
-	Travel.get()
-		.$promise.then(function(response) {
-			var markers	= [];
-			for (var i 	= 0; i < response.data.length; i++) {
-				marker = {
-					id: i,
-					latitude: response.data[i].lat,
-					longitude: response.data[i].lng,
-					title: response.data[i].title,
-					icon: {
-						path: MAP_PIN,
-						fillColor: '#0E77E9',
-						fillOpacity: 1,
-						strokeColor: '#FFF',
-						strokeWeight: 1,
-						scale: 0.2
-					},
-					label: '<i class="map-icon-parking"></i>'
-				};
-				marker['id'] 	= i;
-				markers.push(marker);
-			}
-			scope.locations		= markers;
-		});
-
-}]);
 app.filter('fromNow', function() {
 		return function(date) {
 			return moment(date).fromNow();
@@ -859,7 +738,7 @@ app.factory('PostTypes', ['$resource', '$rootScope', function(resource, rootScop
 		return resource('http://178.62.102.219/core/post-types',{},{});
 	}]);
 app.factory('Posts', ['$resource', '$rootScope', function(resource, rootScope) {
-		return resource('http://178.62.102.219/posts/:post_id', {
+		return resource('http://www.blog.net/posts/:post_id', {
 			post_id:'@post_id'
 		}, {
 			update: {
@@ -955,5 +834,126 @@ app.factory('Twitter', ['$q', '$rootScope', '$http', 'Base64', function(q, rootS
 			});
 		}
 	}
+
+}]);
+app.controller('BlogCtrl', ['$scope', '$state', 'LatestBlog', 'Tags', function(scope, state, LatestBlog, Tags) {
+
+	LatestBlog.get({}, {})
+		.$promise.then(function(response) {
+			scope.latest_posts 	= response.data;
+		});
+
+	Tags.get({}, {})
+		.$promise.then(function(response) {
+			scope.tags					= response.data;
+		});
+
+}]);
+app.controller('BlogListCtrl', ['$scope', '$state', '$sce', 'Blog', function(scope, sce, state, Blog) {
+
+	scope.posts_returned 	= false;
+
+	Blog.get()
+		.$promise.then(function(response) {
+			var third_length			= Math.ceil(response.data.length / 3);
+			scope.posts_left			= response.data.slice(0, third_length);
+			scope.posts_center			= response.data.slice(third_length, (third_length*2));
+			scope.posts_right			= response.data.slice((third_length*2));
+			scope.posts_returned 	= true;
+		});
+
+
+	window.twttr=(function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],t=window.twttr||{};if(d.getElementById(id))return;js=d.createElement(s);js.id=id;js.src="https://platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);t._e=[];t.ready=function(f){t._e.push(f);};return t;}(document,"script","twitter-wjs"));
+
+}]);
+app.controller('BlogPostCtrl', ['$scope', '$state', '$stateParams', '$sce', 'Blog', function(scope, state, stateParams, sce, Blog) {
+
+	scope.post_returned = false;
+
+	Blog.get({post_id:stateParams.post_id})
+		.$promise.then(function(response) {
+			console.log(response);
+			scope.post 			= response.data;
+			scope.post_returned = true;
+			scope.post_content	= sce.trustAsHtml(response.data.content);
+		});
+
+}]);
+app.controller('HomeCtrl', ['$scope', function($scope) {
+  
+}]);
+app.controller('MusicCtrl', ['$scope', '$state', '$sce', 'Playlists', function(scope, sce, state, Playlists) {
+
+	scope.page_title	= "Latest Music";
+
+	Playlists.get()
+		.$promise.then(function(response) {
+			scope.playlists				= response.data;
+			scope.playlists_returned 	= true;
+		});
+
+}]);
+app.controller('MusicListCtrl', ['$scope', '$state', '$sce', 'Tracks', function(scope, sce, state, Tracks) {
+
+	Tracks.get()
+		.$promise.then(function(response) {
+			var third_length		= Math.ceil(response.data.length / 3);
+			scope.tracks_left		= response.data.slice(0, third_length);
+			scope.tracks_center		= response.data.slice(third_length, (third_length*2));
+			scope.tracks_right		= response.data.slice((third_length*2));
+			scope.tracks_returned 	= true;
+		});
+
+}]);
+app.controller('PlaylistCtrl', ['$scope', '$stateParams', 'Playlists', function(scope, stateParams, Playlists) {
+
+	scope.$parent.page_title	= "Playlists";
+
+	Playlists.get({playlist_id: stateParams.playlist_id})
+		.$promise.then(function(response) {
+			scope.playlist = response.data;
+		});
+
+}]);
+app.controller('TravelCtrl', ['$scope', '$state', 'uiGmapGoogleMapApi', 'Travel', function(scope, state, uiGmapGoogleMapApi, Travel) {
+
+	uiGmapGoogleMapApi.then(function(maps) {
+
+		scope.map = {
+			center: {
+				latitude: 45,
+				longitude: -73
+			},
+			zoom: 3
+		};
+
+	});
+
+	scope.locations 	= [];
+
+	Travel.get()
+		.$promise.then(function(response) {
+			var markers	= [];
+			for (var i 	= 0; i < response.data.length; i++) {
+				marker = {
+					id: i,
+					latitude: response.data[i].lat,
+					longitude: response.data[i].lng,
+					title: response.data[i].title,
+					icon: {
+						path: MAP_PIN,
+						fillColor: '#0E77E9',
+						fillOpacity: 1,
+						strokeColor: '#FFF',
+						strokeWeight: 1,
+						scale: 0.2
+					},
+					label: '<i class="map-icon-parking"></i>'
+				};
+				marker['id'] 	= i;
+				markers.push(marker);
+			}
+			scope.locations		= markers;
+		});
 
 }]);
