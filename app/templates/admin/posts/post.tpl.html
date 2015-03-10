@@ -1,0 +1,134 @@
+<nav class="navbar navbar-default navbar-admin navbar-fixed-top col-md-10 col-md-offset-2">
+	<div class="container-fluid">
+		<!-- Brand and toggle get grouped for better mobile display -->
+		<div class="navbar-header">
+			<a class="navbar-brand" ng-bind="page_title"></a>
+		</div>
+
+		<!-- Collect the nav links, forms, and other content for toggling -->
+		<div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+			<ul class="nav navbar-nav">
+				<li ng-hide="post_returned">
+					<a>
+						<i class="fa fa-fw fa-spin fa-refresh"></i>Loading Post...
+					</a>
+				</li>
+				<li ng-show="post_returned">
+					<a ng-show="saving_post">
+						<i class="fa fa-fw fa-spin fa-refresh"></i>Saving Changes...
+					</a>
+					<a ng-hide="saving_post">
+						<span ng-show="post_saved" class="text-success">All Changes Saved</span>
+						<span ng-hide="post_saved" class="text-danger">Changes Not Saved</span>
+					</a>
+				</li>
+			</ul>
+
+			<ul class="nav navbar-nav navbar-right">
+				<li>
+					<a id="preview-btn" ng-click="preview()" ng-disabled="!post_returned">
+						<span ng-show="preview_requested">Edit</span>
+						<span ng-hide="preview_requested">Preview</span>
+					</a>
+				</li>
+				<li>
+					<a id="save-btn" ng-click="save()" ng-disabled="!post_returned">
+						<span ng-show="saving_post"><i class="fa fa-fw fa-spin fa-refresh"></i>Saving...</span>
+						<span ng-hide="saving_post">Save</span>
+					</a>
+				</li>
+			</ul>
+		</div><!-- /.navbar-collapse -->
+
+	</div><!-- /.container-fluid -->
+</nav>
+
+<div class="main-content">
+
+	<div class="container-fluid">
+
+		<div class="row">
+			<div class="col-md-10 col-md-offset-1">
+
+				<form class="form-horizontal post_form">
+					<div class="form-group">
+						<div class="col-sm-9">
+							<input 	class="form-control"
+									placeholder="Post Title"
+									ng-model="post.title"
+									ng-change="request_save()">
+						</div>
+						<label for="inputEmail3" class="col-sm-1 control-label">Type</label>
+						<div class="col-sm-2">
+							<select
+								class="form-control"
+								ng-options="type.value as type.type for type in post_types"
+								ng-model="post.type"
+								ng-change="request_save()"></select>
+						</div>
+					</div>
+					<div class="form-group">
+						<div class="col-sm-1">
+							<div class="checkbox">
+								<label>
+									<input 	type="checkbox"
+											ng-model="post.draft"
+											ng-true-value="false"
+											ng-false-value="true"
+											ng-change="save()"> Live
+								</label>
+							</div>
+						</div>
+
+						<label for="inputEmail3" class="col-sm-1 control-label"> Date</label>
+						<div class="col-sm-2">
+							<input 	class="form-control datepicker"
+									placeholder="dd/mm/yyyy"
+									ng-model="post.created_at	"
+									ng-change="request_save()">
+						</div>
+
+						<label for="inputEmail3" class="col-sm-1 control-label">Location</label>
+						<div class="col-sm-7">
+							<input 	type="text"
+									class="m-b-0 form-control"
+									ng-autocomplete
+									ng-model="autocomplete"
+									details="details"
+									ng-model="post.formatted_address"
+									ng-disabled="!post_returned">
+						</div>
+					</div>
+
+					<div class="row">
+						<hr>
+					</div>
+
+					<div class="form-group">
+						<div class="col-md-9">
+							<label>Content</label>
+							<div ng-show="preview_requested" ng-bind-html="preview_content"></div>
+							<textarea
+								class="form-control"
+								rows="10"
+								ng-model="post.content"
+								ng-change="request_save()"
+								ng-hide="preview_requested">
+							</textarea>
+						</div>
+						<div class="col-md-3">
+							<div><label>Tags</label></div>
+							<input type="text" class="tags-input form-control" placeholder="Add Tag" ng-readonly="!post_returned" ng-keydown="add_tag($event)">
+							<ul class="list-group tag-list" ng-repeat="tag in post.tags">
+								<li class="list-group-item" ng-bind="tag" ng-click="remove_tag($index)"></li>
+							</ul>
+						</div>
+					</div>
+
+				</form>
+
+			</div>
+		</div>
+
+	</div>
+</div>

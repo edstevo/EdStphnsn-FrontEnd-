@@ -1,0 +1,34 @@
+<div class="col-md-12" ng-hide="tracks_returned">
+	<i class="fa fa-fw fa-spin fa-refresh" style="margin-top:15px;"></i>Loading...
+</div>
+
+<div class="col-md-4 padding-0" ng-show="tracks_returned">
+
+	<div class="panel-body blog-post-preview pointer" ng-repeat="track in tracks_left">
+		<div class="heading">{{ track.name }}</div>
+		<div class="sub-heading">
+			<div class="author" ng-bind="track.artist"></div>
+		</div>
+	</div>
+
+</div>
+<div class="col-md-4 padding-0" ng-show="tracks_returned">
+
+	<div class="panel-body blog-post-preview pointer" ng-repeat="track in tracks_center">
+		<div class="heading">{{ track.name }}</div>
+		<div class="sub-heading">
+			<div class="author" ng-bind="track.artist"></div>
+		</div>
+	</div>
+
+</div>
+<div class="col-md-4 padding-0" ng-show="tracks_returned">
+
+	<div class="panel-body blog-post-preview pointer" ng-repeat="track in tracks_right">
+		<div class="heading">{{ track.name }}</div>
+		<div class="sub-heading">
+			<div class="author" ng-bind="track.artist"></div>
+		</div>
+	</div>
+
+</div>

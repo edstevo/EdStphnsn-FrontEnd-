@@ -58,7 +58,8 @@ gulp.task('scripts', function() {
 				'bower_components/ngAutocomplete/src/ngAutocomplete.js',
 				'bower_components/map-icons/js/map-icons.js',
 				'bower_components/jquery-sticky/jquery.sticky.js',
-				'bower_components/bootstrap-datepicker/js/bootstrap-datepicker.js'	])
+				'bower_components/bootstrap-datepicker/js/bootstrap-datepicker.js',
+				'bower_components/bootstrap/dist/js/bootstrap.js'	])
 		.pipe(concat('vendor.js'))
 		.pipe(uglify())
 		.pipe(gulp.dest('app/js/'));
