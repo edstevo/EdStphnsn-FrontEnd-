@@ -4,7 +4,9 @@
 
 <div class="col-md-4 padding-0" ng-show="posts_returned">
 
-	<div class="panel-body blog-post-preview pointer" ng-repeat="post in posts_left">
+	<div 	class="panel-body blog-post-preview pointer"
+			ui-sref="app.public.blog.post({post_id:post.id})"
+			ng-repeat="post in posts_left">
 		<div class="heading">{{ post.title }}</div>
 		<div class="sub-heading">
 			<div class="author" ng-bind="post.creator.name"></div>
@@ -12,18 +14,16 @@
 		</div>
 		<div class="clearfix"></div>
 		<div class="toolbar">
-			<a 	class="twitter-share-button"
-				href="https://twitter.com/share?url=http://edstphnsn.co/post/{{ post.id }}&text=@ed_stphnsn talking about {{ post.title }}: ">
-				Tweet This
-			</a>
-			<a ui-sref="app.public.blog.post({post_id:post.id})">Read</a>
+			<a ui-sref="app.public.blog.post({post_id:post.id})" analytics-category="Blog" analytics-label="{{ post.title }}">Read</a>
 		</div>
 	</div>
 
 </div>
 <div class="col-md-4 padding-0" ng-show="posts_returned">
 
-	<div class="panel-body blog-post-preview pointer" ng-repeat="post in posts_center">
+	<div 	class="panel-body blog-post-preview pointer"
+			ui-sref="app.public.blog.post({post_id:post.id})"
+			ng-repeat="post in posts_center">
 		<div class="heading">{{ post.title }}</div>
 		<div class="sub-heading">
 			<div class="author" ng-bind="post.creator.name"></div>
@@ -31,18 +31,16 @@
 		</div>
 		<div class="clearfix"></div>
 		<div class="toolbar">
-			<a 	class="twitter-share-button"
-				href="https://twitter.com/share?url=http://edstphnsn.co/post/{{ post.id }}&text=@ed_stphnsn talking about {{ post.title }}: ">
-				Tweet This
-			</a>
-			<a ui-sref="app.public.blog.post({post_id:post.id})">Read</a>
+			<a ui-sref="app.public.blog.post({post_id:post.id})" analytics-category="Blog" analytics-label="{{ post.title }}">Read</a>
 		</div>
 	</div>
 
 </div>
 <div class="col-md-4 padding-0" ng-show="posts_returned">
 
-	<div class="panel-body blog-post-preview pointer" ng-repeat="post in posts_right">
+	<div 	class="panel-body blog-post-preview pointer"
+			ui-sref="app.public.blog.post({post_id:post.id})"
+			ng-repeat="post in posts_right">
 		<div class="heading">{{ post.title }}</div>
 		<div class="sub-heading">
 			<div class="author" ng-bind="post.creator.name"></div>
@@ -50,11 +48,7 @@
 		</div>
 		<div class="clearfix"></div>
 		<div class="toolbar">
-			<a 	class="twitter-share-button"
-				href="https://twitter.com/share?url=http://edstphnsn.co/post/{{ post.id }}&text=@ed_stphnsn talking about {{ post.title }}: ">
-				Tweet This
-			</a>
-			<a ui-sref="app.public.blog.post({post_id:post.id})">Read</a>
+			<a ui-sref="app.public.blog.post({post_id:post.id})" analytics-category="Blog" analytics-label="{{ post.title }}">Read</a>
 		</div>
 	</div>
 

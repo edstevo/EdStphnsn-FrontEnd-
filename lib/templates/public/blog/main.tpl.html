@@ -10,9 +10,16 @@
 
 		<dl class="latest-posts">
 
-			<div class="post-item" ng-repeat="post in latest_posts" ui-sref="app.public.blog.post({post_id:post.id})">
+			<div 	class="post-item"
+					ng-repeat="post in latest_posts"
+					ui-sref="app.public.blog.post({post_id:post.id})"
+					ng-show="latest_posts_returned">
 				<dt ng-bind="post.title"></dt>
 				<dd ng-bind="post.created_at | readableDate"></dd>
+			</div>
+
+			<div 	ng-hide="latest_posts_returned">
+				<i class="fa fa-fw fa-spin fa-refresh" style="margin-top:15px;"></i>Loading...
 			</div>
 
 		</dl>
@@ -21,7 +28,14 @@
 
 	<div class="sidebar-widget">
 		<h5>Tags</h5>
-		<span class="tag" ng-bind="tag.name" ng-repeat="tag in tags"></span>
+		<span 	class="tag"
+				ng-bind="tag.name"
+				ng-repeat="tag in tags"
+				ng-show="tags_returned"></span>
+
+		<div 	ng-hide="tags_returned">
+			<i class="fa fa-fw fa-spin fa-refresh" style="margin-top:15px;"></i>Loading...
+		</div>
 	</div>
 
 </div>

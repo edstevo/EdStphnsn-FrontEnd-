@@ -2,9 +2,11 @@ var app = angular.module('app', [	'ngResource',
 									'ui.router',
 									'uiGmapgoogle-maps',
 									'ngAutocomplete',
-									'ngCookies'	]);
+									'ngCookies',
+									'angulartics',
+									'angulartics.google.analytics'	]);
 
-app.run(['$rootScope', '$state', 'Auth', function(rootScope, state, Auth) {
+app.run(['$rootScope', '$state', '$window', '$location', 'Auth', function(rootScope, state, window, location, Auth) {
 
 	Auth.initialize();
 	Auth.setCredentials();
@@ -15,7 +17,15 @@ app.run(['$rootScope', '$state', 'Auth', function(rootScope, state, Auth) {
 		{
 			state.go('app.public.home');
 		}
-	})
+	});
+
+	(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+	(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+	m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+	})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+	ga('create', 'UA-60579039-1', 'auto');
+	window.ga('send', 'pageview', { page: location.url() });
 
 }]);
 
@@ -129,17 +139,12 @@ app.config(['$stateProvider', '$urlRouterProvider', function(stateProvider, urlR
 app.config(['$stateProvider', function(stateProvider) {
 
 	stateProvider
-		.state('app.public.home', {
-			url: '/',
-			templateUrl: '../templates/public/home/home.tpl.html',
-			controller: 'HomeCtrl'
-		})
 		.state('app.public.blog', {
 			controller: 'BlogCtrl',
 			templateUrl: '../templates/public/blog/main.tpl.html',
 		})
 			.state('app.public.blog.list', {
-				url: '/blog',
+				url: '/',
 				templateUrl: '../templates/public/blog/list.tpl.html',
 				controller: 'BlogListCtrl'
 			})
@@ -436,7 +441,7 @@ app.controller('AdminCtrl', ['$rootScope', '$scope', '$state', 'Auth', function(
 
 	if (!rootScope.user_data || rootScope.user_data.admin === false)
 	{
-		state.go('app.public.home');
+		state.go('app.public.blog.list');
 	}
 
 }]);
@@ -462,127 +467,31 @@ app.controller('NavCtrl', ['$rootScope', '$scope', '$state', 'Twitter', 'Auth', 
 app.controller('PublicCtrl', ['$scope', '$state', function(scope, state) {
 
 }]);
-app.controller('BlogCtrl', ['$scope', '$state', 'LatestBlog', 'Tags', function(scope, state, LatestBlog, Tags) {
-
-	LatestBlog.get({}, {})
-		.$promise.then(function(response) {
-			scope.latest_posts 	= response.data;
-		});
-
-	Tags.get({}, {})
-		.$promise.then(function(response) {
-			scope.tags					= response.data;
-		});
-
-}]);
-app.controller('BlogListCtrl', ['$scope', '$state', '$sce', 'Blog', function(scope, sce, state, Blog) {
-
-	scope.posts_returned 	= false;
-
-	Blog.get()
-		.$promise.then(function(response) {
-			var third_length			= Math.ceil(response.data.length / 3);
-			scope.posts_left			= response.data.slice(0, third_length);
-			scope.posts_center			= response.data.slice(third_length, (third_length*2));
-			scope.posts_right			= response.data.slice((third_length*2));
-			scope.posts_returned 	= true;
-		});
-
-
-	window.twttr=(function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],t=window.twttr||{};if(d.getElementById(id))return;js=d.createElement(s);js.id=id;js.src="https://platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);t._e=[];t.ready=function(f){t._e.push(f);};return t;}(document,"script","twitter-wjs"));
-
-}]);
-app.controller('BlogPostCtrl', ['$scope', '$state', '$stateParams', '$sce', 'Blog', function(scope, state, stateParams, sce, Blog) {
-
-	scope.post_returned = false;
-
-	Blog.get({post_id:stateParams.post_id})
-		.$promise.then(function(response) {
-			console.log(response);
-			scope.post 			= response.data;
-			scope.post_returned = true;
-			scope.post_content	= sce.trustAsHtml(response.data.content);
-		});
-
-}]);
-app.controller('HomeCtrl', ['$scope', function($scope) {
-  
-}]);
-app.controller('MusicCtrl', ['$scope', '$state', '$sce', 'Playlists', function(scope, sce, state, Playlists) {
-
-	scope.page_title	= "Latest Music";
-
-	Playlists.get()
-		.$promise.then(function(response) {
-			scope.playlists				= response.data;
-			scope.playlists_returned 	= true;
-		});
-
-}]);
-app.controller('MusicListCtrl', ['$scope', '$state', '$sce', 'Tracks', function(scope, sce, state, Tracks) {
-
-	Tracks.get()
-		.$promise.then(function(response) {
-			var third_length		= Math.ceil(response.data.length / 3);
-			scope.tracks_left		= response.data.slice(0, third_length);
-			scope.tracks_center		= response.data.slice(third_length, (third_length*2));
-			scope.tracks_right		= response.data.slice((third_length*2));
-			scope.tracks_returned 	= true;
-		});
-
-}]);
-app.controller('PlaylistCtrl', ['$scope', '$stateParams', 'Playlists', function(scope, stateParams, Playlists) {
-
-	scope.$parent.page_title	= "Playlists";
-
-	Playlists.get({playlist_id: stateParams.playlist_id})
-		.$promise.then(function(response) {
-			scope.playlist = response.data;
-		});
-
-}]);
-app.controller('TravelCtrl', ['$scope', '$state', 'uiGmapGoogleMapApi', 'Travel', function(scope, state, uiGmapGoogleMapApi, Travel) {
-
-	uiGmapGoogleMapApi.then(function(maps) {
-
-		scope.map = {
-			center: {
-				latitude: 45,
-				longitude: -73
-			},
-			zoom: 3
-		};
-
+app.filter('fromNow', function() {
+		return function(date) {
+			return moment(date).fromNow();
+		}
 	});
-
-	scope.locations 	= [];
-
-	Travel.get()
-		.$promise.then(function(response) {
-			var markers	= [];
-			for (var i 	= 0; i < response.data.length; i++) {
-				marker = {
-					id: i,
-					latitude: response.data[i].lat,
-					longitude: response.data[i].lng,
-					title: response.data[i].title,
-					icon: {
-						path: MAP_PIN,
-						fillColor: '#0E77E9',
-						fillOpacity: 1,
-						strokeColor: '#FFF',
-						strokeWeight: 1,
-						scale: 0.2
-					},
-					label: '<i class="map-icon-parking"></i>'
-				};
-				marker['id'] 	= i;
-				markers.push(marker);
-			}
-			scope.locations		= markers;
-		});
-
-}]);
+app.filter('readableDate', function() {
+		return function(date) {
+			return moment(date).format("D MMM YYYY");
+		}
+	});
+app.filter('returnDay', function() {
+		return function(date) {
+			return moment(date).format("DD");
+		}
+	});
+app.filter('returnMonth', function() {
+		return function(date) {
+			return moment(date).format("MMM");
+		}
+	});
+app.filter('returnYear', function() {
+		return function(date) {
+			return moment(date).format("YYYY");
+		}
+	});
 app.factory('Admin', [	'Base64',
 						'$rootScope',
 						'$http',
@@ -716,7 +625,7 @@ app.factory('Auth', [	'Base64',
 				cookieStore.remove('user_data');
 				rootScope.user_data	= null;
 				http.defaults.headers.common.Authorization = 'Basic ';
-				state.go('app.public.home');
+				state.go('app.public.blog.list');
 			}
 		};
 
@@ -932,28 +841,129 @@ app.factory('Twitter', ['$q', '$rootScope', '$http', 'Base64', function(q, rootS
 	}
 
 }]);
-app.filter('fromNow', function() {
-		return function(date) {
-			return moment(date).fromNow();
-		}
+app.controller('BlogCtrl', ['$scope', '$state', 'LatestBlog', 'Tags', function(scope, state, LatestBlog, Tags) {
+
+	scope.latest_posts_returned	= false;
+	scope.tags_returned			= false;
+
+	LatestBlog.get({}, {})
+		.$promise.then(function(response) {
+			scope.latest_posts 			= response.data;
+			scope.latest_posts_returned	= true;
+		});
+
+	Tags.get({}, {})
+		.$promise.then(function(response) {
+			scope.tags					= response.data;
+			scope.tags_returned			= true;
+		});
+
+}]);
+app.controller('BlogListCtrl', ['$scope', '$state', '$sce', 'Blog', function(scope, sce, state, Blog) {
+
+	scope.posts_returned 	= false;
+
+	Blog.get()
+		.$promise.then(function(response) {
+			var third_length			= Math.ceil(response.data.length / 3);
+			scope.posts_left			= response.data.slice(0, third_length);
+			scope.posts_center			= response.data.slice(third_length, (third_length*2));
+			scope.posts_right			= response.data.slice((third_length*2));
+			scope.posts_returned 	= true;
+		});
+
+
+	window.twttr=(function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],t=window.twttr||{};if(d.getElementById(id))return;js=d.createElement(s);js.id=id;js.src="https://platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);t._e=[];t.ready=function(f){t._e.push(f);};return t;}(document,"script","twitter-wjs"));
+
+}]);
+app.controller('BlogPostCtrl', ['$scope', '$state', '$stateParams', '$sce', 'Blog', function(scope, state, stateParams, sce, Blog) {
+
+	scope.post_returned = false;
+
+	Blog.get({post_id:stateParams.post_id})
+		.$promise.then(function(response) {
+			console.log(response);
+			scope.post 			= response.data;
+			scope.post_returned = true;
+			scope.post_content	= sce.trustAsHtml(response.data.content);
+		});
+
+}]);
+app.controller('HomeCtrl', ['$scope', function($scope) {
+  
+}]);
+app.controller('MusicCtrl', ['$scope', '$state', '$sce', 'Playlists', function(scope, sce, state, Playlists) {
+
+	scope.page_title	= "Latest Music";
+
+	Playlists.get()
+		.$promise.then(function(response) {
+			scope.playlists				= response.data;
+			scope.playlists_returned 	= true;
+		});
+
+}]);
+app.controller('MusicListCtrl', ['$scope', '$state', '$sce', 'Tracks', function(scope, sce, state, Tracks) {
+
+	Tracks.get()
+		.$promise.then(function(response) {
+			var third_length		= Math.ceil(response.data.length / 3);
+			scope.tracks_left		= response.data.slice(0, third_length);
+			scope.tracks_center		= response.data.slice(third_length, (third_length*2));
+			scope.tracks_right		= response.data.slice((third_length*2));
+			scope.tracks_returned 	= true;
+		});
+
+}]);
+app.controller('PlaylistCtrl', ['$scope', '$stateParams', 'Playlists', function(scope, stateParams, Playlists) {
+
+	scope.$parent.page_title	= "Playlists";
+
+	Playlists.get({playlist_id: stateParams.playlist_id})
+		.$promise.then(function(response) {
+			scope.playlist = response.data;
+		});
+
+}]);
+app.controller('TravelCtrl', ['$scope', '$state', 'uiGmapGoogleMapApi', 'Travel', function(scope, state, uiGmapGoogleMapApi, Travel) {
+
+	uiGmapGoogleMapApi.then(function(maps) {
+
+		scope.map = {
+			center: {
+				latitude: 45,
+				longitude: -73
+			},
+			zoom: 3
+		};
+
 	});
-app.filter('readableDate', function() {
-		return function(date) {
-			return moment(date).format("D MMM YYYY");
-		}
-	});
-app.filter('returnDay', function() {
-		return function(date) {
-			return moment(date).format("DD");
-		}
-	});
-app.filter('returnMonth', function() {
-		return function(date) {
-			return moment(date).format("MMM");
-		}
-	});
-app.filter('returnYear', function() {
-		return function(date) {
-			return moment(date).format("YYYY");
-		}
-	});
+
+	scope.locations 	= [];
+
+	Travel.get()
+		.$promise.then(function(response) {
+			var markers	= [];
+			for (var i 	= 0; i < response.data.length; i++) {
+				marker = {
+					id: i,
+					latitude: response.data[i].lat,
+					longitude: response.data[i].lng,
+					title: response.data[i].title,
+					icon: {
+						path: MAP_PIN,
+						fillColor: '#0E77E9',
+						fillOpacity: 1,
+						strokeColor: '#FFF',
+						strokeWeight: 1,
+						scale: 0.2
+					},
+					label: '<i class="map-icon-parking"></i>'
+				};
+				marker['id'] 	= i;
+				markers.push(marker);
+			}
+			scope.locations		= markers;
+		});
+
+}]);

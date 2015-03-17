@@ -119,8 +119,8 @@
 						<div class="col-md-3">
 							<div><label>Tags</label></div>
 							<input type="text" class="tags-input form-control" placeholder="Add Tag" ng-readonly="!post_returned" ng-keydown="add_tag($event)">
-							<ul class="list-group tag-list" ng-repeat="tag in post.tags">
-								<li class="list-group-item" ng-bind="tag" ng-click="remove_tag($index)"></li>
+							<ul class="list-group tag-list">
+								<li class="list-group-item" ng-bind="tag" ng-click="remove_tag($index)" ng-repeat="tag in post.tags"></li>
 							</ul>
 						</div>
 					</div>

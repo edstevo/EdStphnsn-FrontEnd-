@@ -8,7 +8,7 @@
 			<div class="day" ng-bind="post.created_at | returnDay"></div>
 			<div class="year" ng-bind="post.created_at | returnYear"></div>
 		</div>
-		<div class="topics">
+		<div class="topics" ng-show="post_returned">
 			<h6>Categories</h6>
 			<div ng-repeat="tag in post.tags" ng-bind="tag.name"></div>
 		</div>
@@ -20,6 +20,10 @@
 			<h3 class="post-title" ng-bind="post.title"></h3>
 			<h6 class="subheader meta-data">
 				<i class="fa fa-fw fa-pencil"></i><span ng-bind="post.creator.name"></span>
+				<a 	class="twitter-share-button pull-right"
+					href="https://twitter.com/share?url=http://edstphnsn.co/#/blog/{{ post.id }}&text=@ed_stphnsn talking about {{ post.title }}: ">
+					<i class="fa fa-twitter"></i>Tweet This
+				</a>
 			</h6>
 		</div>
 

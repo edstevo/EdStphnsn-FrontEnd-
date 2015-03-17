@@ -30,7 +30,7 @@
 		}
 
 		.topics {
-			padding: 20px;
+			padding: 15px;
 			color: white;
 			font-weight: lighter;
 			font-size: @font-size-small;
@@ -39,6 +39,19 @@
 				font-weight: lighter;
 				padding-bottom: 5px;
 				border-bottom: 1px solid white;
+			}
+		}
+
+		.side_comments {
+			padding: 15px;
+			color: white;
+			font-weight: lighter;
+			font-size: @font-size-small;
+			cursor: pointer;
+
+			h6 {
+				font-weight: lighter;
+				padding-bottom: 5px;
 			}
 		}
 
@@ -180,4 +193,11 @@
 		}
 	}
 
+}
+
+/* Smartphones (portrait) ----------- */
+@media only screen and (max-width : 480px) {
+	.blog-sidebar {
+		display: none;
+	}
 }
